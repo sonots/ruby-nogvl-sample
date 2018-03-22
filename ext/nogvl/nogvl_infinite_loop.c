@@ -3,7 +3,7 @@
 
 #define N_LOOP 100000000000
 
-int stop_infinite_loop = 0;
+static int stop = 0;
 
 // rb_thread_call_without_gvl
 struct nogvl_infinite_loop_args {
@@ -15,7 +15,7 @@ static void* nogvl_infinite_loop(void *ptr)
 {
     struct nogvl_infinite_loop_args *args = ptr;
     printf("infinite_loop(%ld)\n", args->n_loop);
-    for (size_t i = 0; !stop_infinite_loop && i < args->n_loop; i++);
+    for (size_t i = 0; !stop && i < args->n_loop; i++);
     return (void*)Qnil;
 }
 
@@ -26,7 +26,7 @@ struct nogvl_infinite_loop_ubf_args {
 // rb_thread_call_without_gvl
 static void nogvl_infinite_loop_ubf(void *ptr)
 {
-    stop_infinite_loop = 1;
+    stop = 1;
 }
 
 VALUE run_infinite_loop()
