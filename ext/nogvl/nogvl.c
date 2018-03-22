@@ -37,15 +37,25 @@ int invoke_threads()
     return 0;
 }
 
-static VALUE without_gvl_cb(void *param)
+// rb_thread_call_without_gvl
+struct nogvl_run_args {
+    int val;
+};
+
+// rb_thread_call_without_gvl
+static void* nogvl_run(void *ptr)
 {
+    struct nogvl_run_args *args = ptr;
+    printf("args->val %d\n", args->val);
     invoke_threads();
-    return Qnil;
+    return (void*)Qnil;
 }
 
 static VALUE run()
 {
-    return (VALUE)rb_thread_call_without_gvl((void *)(rb_blocking_function_t *)without_gvl_cb, NULL, NULL, NULL);
+    struct nogvl_run_args args;
+    args.val = 1;
+    return (VALUE)rb_thread_call_without_gvl(nogvl_run, &args, RUBY_UBF_IO, NULL);
 }
 
 void
