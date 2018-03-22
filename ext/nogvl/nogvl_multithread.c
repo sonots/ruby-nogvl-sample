@@ -8,6 +8,8 @@
 #define N_THREAD 3
 #define N_LOOP 100000000000
 
+int stop_multithread = 0;
+
 pid_t gettid(void)
 {
     return syscall(SYS_gettid);
@@ -17,7 +19,7 @@ void *thread_process(void *p)
 {
     pid_t current_tid = gettid();
     printf("tid: %d\n", current_tid);
-    for (size_t i = 0; i < N_LOOP; i++);
+    for (size_t i = 0; !stop_multithread && i < N_LOOP; i++);
     pthread_exit(NULL);
     return 0;
 }
@@ -53,10 +55,21 @@ static void* nogvl_multithread(void *ptr)
     return (void*)Qnil;
 }
 
+// rb_thread_call_without_gvl
+struct nogvl_multithread_ubf_args {
+};
+
+// rb_thread_call_without_gvl
+static void nogvl_multithread_ubf(void *ptr)
+{
+    stop_multithread = 1;
+}
+
 VALUE run_multithread()
 {
     struct nogvl_multithread_args args;
     args.n_thread = N_THREAD;
     args.n_loop = N_LOOP;
-    return (VALUE)rb_thread_call_without_gvl(nogvl_multithread, &args, RUBY_UBF_IO, NULL);
+    struct nogvl_multithread_ubf_args ubf_args;
+    return (VALUE)rb_thread_call_without_gvl(nogvl_multithread, &args, nogvl_multithread_ubf, &ubf_args);
 }
