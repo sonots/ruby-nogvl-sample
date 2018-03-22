@@ -1,3 +1,0 @@
-require 'nogvl'
-
-Nogvl.run

@@ -2,17 +2,26 @@
 
 Test testing `rb_thread_call_without_gvl` with pthread.
 
-## How to run
+## How to build
 
 ```
 bundle install
 bundle exec rake compile
-bundle exec ruby test.rb
+```
+
+## How to run
+
+There 3 samples:
+
+```
+bundle exec ruby examples/nogvl_sleep.rb
+bundle exec ruby examples/nogvl_infinite_loop.rb
+bundle exec ruby examples/nogvl_multithread.rb
 ```
 
 ## Result
 
-You should see 3 threads are utilizing 3 CPU cores with `top` command as:
+`examples/nogvl_multithread.rb` should show that 3 threads are utilizing 3 CPU cores with `top` command as:
 
 ```
   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
