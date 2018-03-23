@@ -1,6 +1,6 @@
 # Nogvl-sample
 
-Test testing `rb_thread_call_without_gvl` with pthread.
+Testing `rb_thread_call_without_gvl`.
 
 ## How to build
 
@@ -11,7 +11,7 @@ bundle exec rake compile
 
 ## How to run
 
-There 3 samples:
+There are 3 samples:
 
 ```
 bundle exec ruby examples/nogvl_sleep.rb
@@ -27,6 +27,8 @@ bundle exec ruby examples/nogvl_multithread.rb
   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
 30914 sonots    20   0  145948  14744   4716 S 301.6  0.0   0:18.47 ruby test.rb
 ```
+
+Also, it is possible to stop computation with Ctrl-C.
 
 ## Effect of No GVL
 
